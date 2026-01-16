@@ -1,0 +1,27 @@
+name: Release Notification
+on: [push]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Adaptive Card to Teams
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0076D7",
+            "summary": "Release Deployed",
+            "sections": [{
+              "activityTitle": "🚀 Release Successfully Deployed",
+              "activitySubtitle": "Service: Payment-Gateway-API",
+              "facts": [
+                { "name": "Status", "value": "Success" },
+                { "name": "Environment", "value": "Production" },
+                { "name": "Engineer", "value": "Aryan Vyas" }
+              ],
+              "markdown": true
+            }]
+          }' \
+          "${{ secrets.TEAMS_WEBHOOK_URL }}"
